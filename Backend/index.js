@@ -14,9 +14,16 @@ connectToMongo();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Health check
+app.get("/", (req, res) => {
+  res.send("IMS Backend is running");
+});
+
+// Routes
 app.use(router);
 
-// Use environment port (Render-safe)
+// Port
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
