@@ -1,83 +1,82 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const products = require('../Models/Products');
+const Products = require("../Models/Products");
 
-//Inserting(Creating) Data:
+// INSERT PRODUCT
 router.post("/insertproduct", async (req, res) => {
+  try {
     const { ProductName, ProductPrice, ProductBarcode } = req.body;
 
-    try {
-        const pre = await products.findOne({ ProductBarcode: ProductBarcode })
-        console.log(pre);
-
-        if (pre) {
-            res.status(422).json("Product is already added.")
-        }
-        else {
-            const addProduct = new products({ ProductName, ProductPrice, ProductBarcode })
-
-            await addProduct.save();
-            res.status(201).json(addProduct)
-            console.log(addProduct)
-        }
+    if (!ProductName || !ProductPrice || !ProductBarcode) {
+      return res.status(422).json({ error: "All fields required" });
     }
-    catch (err) {
-        console.log(err)
-    }
-})
 
-//Getting(Reading) Data:
-router.get('/products', async (req, res) => {
-
-    try {
-        const getProducts = await products.find({})
-        console.log(getProducts);
-        res.status(201).json(getProducts);
+    const exists = await Products.findOne({ ProductBarcode });
+    if (exists) {
+      return res.status(422).json({ error: "Product already exists" });
     }
-    catch (err) {
-        console.log(err);
-    }
-})
 
-//Getting(Reading) individual Data:
-router.get('/products/:id', async (req, res) => {
+    const addProduct = new Products({
+      ProductName,
+      ProductPrice,
+      ProductBarcode,
+    });
 
-    try {
-        const getProduct = await products.findById(req.params.id);
-        console.log(getProduct);
-        res.status(201).json(getProduct);
-    }
-    catch (err) {
-        console.log(err);
-    }
-})
+    await addProduct.save();
+    return res.status(201).json(addProduct);
 
-//Editing(Updating) Data:
-router.put('/updateproduct/:id', async (req, res) => {
-    const { ProductName, ProductPrice, ProductBarcode } = req.body;
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
 
-    try {
-        const updateProducts = await products.findByIdAndUpdate(req.params.id, { ProductName, ProductPrice, ProductBarcode }, { new: true });
-        console.log("Data Updated");
-        res.status(201).json(updateProducts);
-    }
-    catch (err) {
-        console.log(err);
-    }
-})
+// GET ALL PRODUCTS
+router.get("/products", async (req, res) => {
+  try {
+    const products = await Products.find({});
+    return res.status(200).json(products);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
 
-//Deleting Data:
-router.delete('/deleteproduct/:id', async (req, res) => {
+// GET SINGLE PRODUCT
+router.get("/products/:id", async (req, res) => {
+  try {
+    const product = await Products.findById(req.params.id);
+    return res.status(200).json(product);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
 
-    try {
-        const deleteProduct = await products.findByIdAndDelete(req.params.id);
-        console.log("Data Deleted");
-        res.status(201).json(deleteProduct);
-    }
-    catch (err) {
-        console.log(err);
-    }
-})
+// UPDATE PRODUCT
+router.put("/updateproduct/:id", async (req, res) => {
+  try {
+    const updated = await Products.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    return res.status(200).json(updated);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
 
+// DELETE PRODUCT
+router.delete("/deleteproduct/:id", async (req, res) => {
+  try {
+    const deleted = await Products.findByIdAndDelete(req.params.id);
+    return res.status(200).json(deleted);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
 
 module.exports = router;
