@@ -11,8 +11,18 @@ const app = express();
 // Connect to MongoDB
 connectToMongo();
 
-// Middleware
-app.use(cors());
+// ✅ FIXED CORS
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://ims-blush.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 app.use(express.json());
 
 // Health check
@@ -27,5 +37,5 @@ app.use(router);
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`IMS Backend listening on port ${PORT}`);
 });
