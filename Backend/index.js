@@ -1,19 +1,24 @@
-const connectToMongo = require('./db')
+require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors");
+
+const connectToMongo = require("./db");
+const router = require("./Routes/router");
+
+const app = express();
+
+// Connect to MongoDB
 connectToMongo();
 
-const express = require('express')
-const app = express()
-const port = 3001
-
-const cors = require('cors')
-const router = require('./Routes/router')
-
+// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(router);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+// Use environment port (Render-safe)
+const PORT = process.env.PORT || 3001;
 
-
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}`);
+});
