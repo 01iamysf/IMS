@@ -20,7 +20,7 @@ app.use(cors({
     "https://ims-blush.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
 app.options("*", cors());
