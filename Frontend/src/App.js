@@ -1,10 +1,13 @@
 import './App.css';
+
 import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Products from './components/Products';
 import InsertProduct from './components/InsertProduct';
 import UpdateProduct from './components/UpdateProduct';
 import About from './components/About';
+import Login from './components/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import {
   BrowserRouter as Router,
@@ -19,11 +22,56 @@ function App() {
 
       <div className="App">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/insertproduct" element={<InsertProduct />} />
-          <Route path="/updateproduct/:id" element={<UpdateProduct />} />
-          <Route path="/about" element={<About />} />
+
+          {/* Public Route */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute>
+                <Products />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/insertproduct"
+            element={
+              <ProtectedRoute>
+                <InsertProduct />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/updateproduct/:id"
+            element={
+              <ProtectedRoute>
+                <UpdateProduct />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/about"
+            element={
+              <ProtectedRoute>
+                <About />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
       </div>
     </Router>
