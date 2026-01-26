@@ -6,8 +6,7 @@ router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   if (
-    email !== process.env.ADMIN_EMAIL ||
-    password !== process.env.ADMIN_PASSWORD
+	email !== "admin@ims.com" || password !== "Admin@123"
   ) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
