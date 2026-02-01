@@ -7,6 +7,7 @@ import InsertProduct from './components/InsertProduct';
 import UpdateProduct from './components/UpdateProduct';
 import About from './components/About';
 import Login from './components/Login';
+import Register from './components/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import {
@@ -23,8 +24,10 @@ function App() {
       <div className="App">
         <Routes>
 
-          {/* Public Route */}
+          {/* Public Routes */}
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
 
           {/* Protected Routes */}
           <Route
@@ -63,15 +66,6 @@ function App() {
             }
           />
 
-          <Route
-            path="/about"
-            element={
-              <ProtectedRoute>
-                <About />
-              </ProtectedRoute>
-            }
-          />
-
         </Routes>
       </div>
     </Router>
@@ -79,3 +73,4 @@ function App() {
 }
 
 export default App;
+
